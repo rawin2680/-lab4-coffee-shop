@@ -1,18 +1,24 @@
-let express = require('express')
-let bodyParser = require('body-parser')
- 
+
+// src/app.js (ฉบับปรับปรุง MVC)
+const express = require('express')
+const cors = require('cors')
+// const config = require('./config/config') // (ถ้ามีไฟล์ config)
+
 const app = express()
- 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
- 
-// เรียกใช้ routes.js โดยส่ง app เข้าไป
+
+// --- Middleware Zone ---
+// ใช้ express.json() แทน body-parser.json() 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cors())
+
+// --- Routes Zone ---
+// เรียกใช้งานไฟล์ routes.js ที่เราเพิ่งสร้าง
 require('./routes')(app)
- 
-// ไม่ต้องมี route อื่นแล้วตาม Lab5
- 
-let port = 8081
- 
+
+// --- Server Start ---
+const port = process.env.PORT || 8081
 app.listen(port, function () {
-    console.log('server running on ' + port)
+  console.log('Server running on port ' + port)
 })
+
